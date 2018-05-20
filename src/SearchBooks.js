@@ -11,41 +11,40 @@ class SearchBooks extends Component {
         query: ''
     };
 
-updateQuery = (query) => {
+    updateQuery = (query) => {
+        if(query === '') {
+            this.setState({
+                query: '',
+                books : []
+            });
+            return;
+        }
 
-    const apiCall = _.debounce((query) => {
-        BooksAPI.search(query).then((books) => {
-            if (typeof books === 'undefined' || (!Array.isArray(books) && books.hasOwnProperty('error'))) {
-                return;
-            } else {
-                books.map((book) => {
-                    if(!book.imageLinks) {
-                        book.imageLinks = {
-                            thumbnail: ''
-                        };
-                    }
-                    book.shelf = "none";
-                });
-                this.setState({books});
-                console.log(books);
-            }
-        });
-    }, 500);
+        const apiCall = _.debounce((query) => {
+            BooksAPI.search(query).then((books) => {
+                if (typeof books === 'undefined' || (!Array.isArray(books) && books.hasOwnProperty('error'))) {
+                    return;
+                } else {
+                    books.map((book) => {
+                        //prevents rendering errors if books don't have an image link
+                        if(!book.imageLinks) {
+                            book.imageLinks = {
+                                thumbnail: ''
+                            };
+                        }
+                        book.shelf = "none";
+                    });
+                    this.setState({books});
+                }
+            });
+        }, 200);
 
-    this.setState({
-        query: query.trim()
-    });
-
-    const newSearch = this.state.query;
-
-    if(!newSearch || newSearch === '') {
         this.setState({
-            books : []
-        })
-    } else {
-        apiCall(newSearch);
-    }
-};
+            query: query.trim()
+        });
+
+        apiCall(query);
+    };
 
     render() {
         return (
