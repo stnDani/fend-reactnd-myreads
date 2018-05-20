@@ -6,10 +6,10 @@ class ListBooks extends Component {
 
     changeShelfTo = (book, shelf) => {
         update(book, shelf)
-            .then((response) => console.log('updated', response))
+            .then((response) => console.log('updated', response));
 
-        //this.props.update()
-    }
+        this.props.updateBooks();
+    };
 
     render() {
         return (
