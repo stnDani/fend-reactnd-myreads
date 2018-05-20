@@ -7,7 +7,7 @@ class ListBooks extends Component {
     changeShelfTo = (book, shelf) => {
         update(book, shelf)
             .then((response) => console.log('updated', response));
-
+        this.forceUpdate();
         this.props.updateBooks();
     };
 
@@ -26,7 +26,7 @@ class ListBooks extends Component {
                                     this.changeShelfTo(book, e.target.value);
                                     book.shelf = e.target.value;
                                     }} value={book.shelf}>
-                                    <option value="none" disabled>Move to...</option>
+                                    <option value="moveTo" disabled>Move to...</option>
                                     <option value="currentlyReading">Currently Reading</option>
                                     <option value="wantToRead">Want to Read</option>
                                     <option value="read">Read</option>

@@ -23,6 +23,10 @@ class SearchBooks extends Component {
         const apiCall = _.debounce((query) => {
             BooksAPI.search(query).then((books) => {
                 if (typeof books === 'undefined' || (!Array.isArray(books) && books.hasOwnProperty('error'))) {
+                    this.setState({
+                        books: []
+                    });
+                    this.forceUpdate();
                     return;
                 } else {
                     books.map((book) => {
@@ -46,7 +50,7 @@ class SearchBooks extends Component {
                                 book.shelf = shelvedBook.shelf;
                             }
                         });
-
+                        return book;
                     });
                     this.setState({books});
                 }
