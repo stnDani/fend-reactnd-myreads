@@ -28,9 +28,9 @@ class BooksApp extends React.Component {
     render() {
         return (
             <div className="app">
-                {/*<Route path="/searchBooks" component={SearchBooks}/>*/}
-                <Route path="/searchBooks" render={() => (
-                    <SearchBooks updateBooks={this.updateBooks}/>
+                {/*<Route path="/search" component={SearchBooks}/>*/}
+                <Route path="/search" render={() => (
+                    <SearchBooks updateBooks={this.updateBooks} shelvedBooks={this.state.books}/>
                 )}/>
                 <Route exact path="/" render={() => (
                         <div className="list-books">
@@ -46,7 +46,7 @@ class BooksApp extends React.Component {
                             </div>
                             <div className="open-search">
                                 <Link
-                                    to={"/searchBooks"}
+                                    to={"/search"}
                                 >Add a book</Link>
                             </div>
                         </div>

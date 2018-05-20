@@ -32,7 +32,21 @@ class SearchBooks extends Component {
                                 thumbnail: ''
                             };
                         }
+
+                        //prevents rendering errors if books don't have an author
+                        if(!book.authors) {
+                            book.authors = [];
+                        }
+
                         book.shelf = "none";
+
+                        //mirrors the state in search book results with the shelved books
+                        this.props.shelvedBooks.forEach((shelvedBook) => {
+                            if (shelvedBook.id === book.id) {
+                                book.shelf = shelvedBook.shelf;
+                            }
+                        });
+
                     });
                     this.setState({books});
                 }
@@ -64,7 +78,7 @@ class SearchBooks extends Component {
                     </div>
                 </div>
                 <div className="search-books-results">
-                    <ListBooks books={this.state.books} shelf={"none"} updateBooks={this.props.updateBooks}/>
+                    <ListBooks books={this.state.books} shelf={"search"} updateBooks={this.props.updateBooks}/>
                 </div>
             </div>
         )
