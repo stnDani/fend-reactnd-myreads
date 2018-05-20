@@ -2,9 +2,7 @@ import React, { Component } from 'react'
 import { Link } from 'react-router-dom'
 import * as BooksAPI from './BooksAPI'
 import ListBooks from './ListBooks'
-import {debounce} from 'throttle-debounce';
-import escapeRegExp from 'escape-string-regexp';
-import { Debounce } from 'react-throttle';
+import _ from 'lodash';
 
 class SearchBooks extends Component {
 
@@ -13,25 +11,41 @@ class SearchBooks extends Component {
         query: ''
     };
 
-    updateQuery = (query) => {
-        this.setState({
-            query: query.trim()
-        });
+updateQuery = (query) => {
 
-        const newSearch = this.state.query;
-
-        if(!newSearch) {
-            this.setState({
-                books : []
-            })
-        } else {
-            BooksAPI.search(query).then((books) => {
+    const apiCall = _.debounce((query) => {
+        BooksAPI.search(query).then((books) => {
+            if (typeof books === 'undefined' || (!Array.isArray(books) && books.hasOwnProperty('error'))) {
+                return;
+            } else {
+                books.map((book) => {
+                    if(!book.imageLinks) {
+                        book.imageLinks = {
+                            thumbnail: ''
+                        };
+                    }
+                    book.shelf = "none";
+                });
+                this.setState({books});
                 console.log(books);
-                books.map( (book) => book.shelf = "none");
-                this.setState({ books });
-            })
-        }
-    };
+            }
+        });
+    }, 500);
+
+    this.setState({
+        query: query.trim()
+    });
+
+    const newSearch = this.state.query;
+
+    if(!newSearch || newSearch === '') {
+        this.setState({
+            books : []
+        })
+    } else {
+        apiCall(newSearch);
+    }
+};
 
     render() {
         return (
@@ -42,14 +56,12 @@ class SearchBooks extends Component {
                         className="close-search"
                     >Close</Link>
                     <div className="search-books-input-wrapper">
-                        {/*<Debounce time="400" handler="onChange">*/}
-                            <input
-                                type="text"
-                                placeholder="Search by title or author"
-                                value={this.state.query}
-                                onChange={(event) => this.updateQuery(event.target.value)}
-                            />
-                        {/*</Debounce>*/}
+                        <input
+                            type="text"
+                            placeholder="Search by title or author"
+                            value={this.state.query}
+                            onChange={(event) => this.updateQuery(event.target.value)}
+                        />
                     </div>
                 </div>
                 <div className="search-books-results">
