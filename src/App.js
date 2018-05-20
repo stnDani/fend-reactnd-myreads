@@ -2,9 +2,12 @@ import React from 'react'
 import * as BooksAPI from './BooksAPI'
 import './App.css'
 import { Link, Route } from 'react-router-dom'
-import ListBooks from "./ListBooks";
 import SearchBooks from "./SearchBooks";
+import BookShelf from "./BookShelf"
 
+const CURRENTLY_READING = "Currently Reading";
+const WANT_TO_READ = "Want to Read";
+const READ = "Read";
 
 class BooksApp extends React.Component {
     state = {
@@ -36,30 +39,9 @@ class BooksApp extends React.Component {
                             </div>
                             <div className="list-books-content">
                                 <div>
-                                    <div className="bookshelf">
-                                        <h2 className="bookshelf-title">Currently Reading</h2>
-                                        <div className="bookshelf-books">
-                                            <div>
-                                                <ListBooks books={this.state.books} shelf={"currentlyReading"} updateBooks={this.updateBooks}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bookshelf">
-                                        <h2 className="bookshelf-title">Want to Read</h2>
-                                        <div className="bookshelf-books">
-                                            <div>
-                                                <ListBooks books={this.state.books} shelf={"wantToRead"} updateBooks={this.updateBooks}/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="bookshelf">
-                                        <h2 className="bookshelf-title">Read</h2>
-                                        <div className="bookshelf-books">
-                                            <div>
-                                                <ListBooks books={this.state.books} shelf={"read"} updateBooks={this.updateBooks}/>
-                                            </div>
-                                        </div>
-                                    </div>
+                                    <BookShelf books={this.state.books} shelf={"currentlyReading"} updateBooks={this.updateBooks} shelfTitle={CURRENTLY_READING}/>
+                                    <BookShelf books={this.state.books} shelf={"wantToRead"} updateBooks={this.updateBooks} shelfTitle={WANT_TO_READ}/>
+                                    <BookShelf books={this.state.books} shelf={"read"} updateBooks={this.updateBooks} shelfTitle={READ}/>
                                 </div>
                             </div>
                             <div className="open-search">
