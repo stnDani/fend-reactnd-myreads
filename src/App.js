@@ -16,6 +16,21 @@ class BooksApp extends React.Component {
 
     updateBooks = () => {
         BooksAPI.getAll().then( (books) => {
+            books.map((book) => {
+                //prevents rendering errors if books don't have an image link
+                if(!book.imageLinks) {
+                    book.imageLinks = {
+                        thumbnail: ''
+                    };
+                }
+
+                //prevents rendering errors if books don't have an author
+                if(!book.authors) {
+                    book.authors = [];
+                }
+                return book;
+            });
+
             this.setState({ books })
         });
     };
