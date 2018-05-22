@@ -57,9 +57,7 @@ class SearchBooks extends Component {
             });
         }, 200);
 
-        this.setState({
-            query: query.trim()
-        });
+        this.setState({ query });
 
         apiCall(query);
     };
